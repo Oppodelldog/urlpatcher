@@ -1,0 +1,7 @@
+.docker
+!.docker/droxy.toml
+
+yarn.lock
+yarn-error.log
+dist
+node_modules

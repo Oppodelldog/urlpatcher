@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>url-patcher test</title>
+    <script src="transform/schema.js"></script>
+    <script src="transform/value.js"></script>
+    <script src="transform/regexReplacement.js"></script>
+    <script src="transform/transformationChain.js"></script>
+    <script src="transform/action.js"></script>
+    <script src="configTabs.js"></script>
+    <script src="test.js"></script>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<ul id="configs" class="configs"></ul>
+<div class="content">
+    <nav>
+        <a href="popup.html">Actions</a>
+        <span>Test</span>
+        <a href="config.html">Config</a>
+    </nav>
+    <div id="tabTest" class="tabTest">
+        <p id="testDescription">The test runs all test urls against all defined actions.<br/>
+            The display is grouped by url and action group.<br/>
+            Per action group the actions are listed pointing to the transformed url.<br/>
+            The last part of the line indicates which transformations were applied.<br/>
+            eg. [0,1] means the first two
+            transformations
+            were applied.<br/>
+            [] indicates that no transformation was applied.
+        </p>
+        <p id="testURLsHint">
+            Add some testURLs to the config to see test result.
+        </p>
+        <ul id="testOutput" class="testOutput"></ul>
+    </div>
+</div>
+
+</body>
+</html>
