@@ -1,6 +1,6 @@
 {
   "name": "url-patcher",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "manifest_version": 2,
   "description": "Fast switching between similar domains by patching the active tab url using custom replacement rules",
   "homepage_url": "https://github.com/Oppodelldog/chrome-extension-url-patcher",
