@@ -1,12 +1,12 @@
 function processTestUrls() {
     const backgroundPage = chrome.extension.getBackgroundPage();
-    const testURLsHint = document.getElementById('testURLsHint')
-    const testDescription = document.getElementById('testDescription');
+    const elTestURLsHint = document.getElementById('testURLsHint')
+    const elTestDescription = document.getElementById('testDescription');
     const elTestOutput = document.getElementById('testOutput');
     const maxLenActionName = getActionNameMaxLen();
     elTestOutput.innerHTML = "";
-    testURLsHint.className = "hidden"
-    testDescription.className = ""
+    elTestURLsHint.className = "hidden"
+    elTestDescription.className = ""
 
     try {
         backgroundPage.getTestUrls().forEach((url) => {
@@ -38,8 +38,8 @@ function processTestUrls() {
         });
 
         if (backgroundPage.getTestUrls().length === 0) {
-            testURLsHint.className = ""
-            testDescription.className = "hidden"
+            elTestURLsHint.className = ""
+            elTestDescription.className = "hidden"
         }
     } catch (e) {
         const elUrl = document.createElement("li");

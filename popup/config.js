@@ -4,29 +4,29 @@ function loadConfig() {
 }
 
 function saveConfig() {
-    const saveStatus = document.getElementById("saveStatus");
     const backgroundPage = chrome.extension.getBackgroundPage();
-    let config = document.getElementById('config');
-    let configValue = config.value;
+    const elSaveStatus = document.getElementById("saveStatus");
+    const elConfig = document.getElementById('config');
+    const configJSONString = elConfig.value;
 
-    saveStatus.innerHTML = "";
-    saveStatus.classList.remove("success")
-    saveStatus.classList.remove("error")
+    elSaveStatus.innerHTML = "";
+    elSaveStatus.classList.remove("success")
+    elSaveStatus.classList.remove("error")
 
     try {
-        backgroundPage.setActiveConfig(JSON.parse(configValue))
+        backgroundPage.setActiveConfig(JSON.parse(configJSONString))
 
-        saveStatus.innerHTML = "OK"
-        saveStatus.classList.add("success")
+        elSaveStatus.innerHTML = "OK"
+        elSaveStatus.classList.add("success")
 
         return true;
     } catch (e) {
-        saveStatus.innerHTML = e.message;
-        saveStatus.classList.add("error")
+        elSaveStatus.innerHTML = e.message;
+        elSaveStatus.classList.add("error")
 
         let errUnexpectedToken = e.message.indexOf("Unexpected token") > -1 && e.message.indexOf("at position") > -1
         if (errUnexpectedToken) {
-            selectTokenErrorPosition(e, config, configValue);
+            selectTokenErrorPosition(e, elConfig, configJSONString);
         }
 
         return false;
