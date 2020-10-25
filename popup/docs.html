@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>url-patcher docs</title>
+    <script src="docs.js"></script>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<nav>
+    <a href="popup.html">Actions</a>
+    <a href="test.html">Test</a>
+    <a href="config.html">Config</a>
+    <span>Docs</span>
+    <a href="about.html">About</a>
+</nav>
+<section id="contents" class="docs">
+    <h1>url - patcher docs</h1>
+    <div id="toc"></div>
+    <h2>Overview</h2>
+    <p>
+        The idea of url patcher is trivial, you define adjustments that shall be done to the current url by a single
+        click.<br/>
+        <br/>
+        <strong>Here's an example:</strong><br/>
+        Your website is published in multiple countries, for every country your domain has the appropriate suffix
+        (<strong>.com,
+        .co.uk, etc</strong>)<br/>
+        <br/>
+        <strong>Precondition to use url-patcher:</strong><br/>
+        You are annoyed by clicking in the url field and change the suffix manually.<br/>
+        <br/>
+        This is the use case url-patcher was made for.<br/>
+        <br/>
+        <strong>How to use url-patcher:</strong><br/>
+        Define an <strong>action</strong> which will execute one or more <strong>replacements</strong> on the url.<br/>
+
+    </p>
+    <h2>Configuration</h2>
+    <p>
+        By default this extension creates a <strong>sample configuration</strong> with some advanced setup.
+        It is intended to help understanding the usage and setup of this extension.<br/><br/>
+
+        The configuration consists of the following sections:<br/>
+    </p>
+    <ul>
+        <li>Actions</li>
+        <li>Transformation Chains</li>
+        <li>Test URLs</li>
+    </ul>
+    <h3>Actions</h3>
+    <p>
+        A action is what you will click on to apply url transformations and load the new url in the active tab.<br/>
+        To separate actions with different concerns actions are grouped in the configuration.<br/>
+        In the example below you find a <strong>action group</strong> named <strong>language</strong>.
+        <br/>
+        The group itself contains the concrete action names <strong>co.uk</strong> and <strong>de</strong><br/>
+        These names are represented in url-patchers <a href="popup.html">Actions Page</a> and define the buttons you can
+        click to change the
+        url.<br/>
+        <br/>
+        Every action consists of the following fields:
+    </p>
+    <ul>
+        <li>chain</li>
+        <li>args</li>
+    </ul>
+    <h4>Chain</h4>
+    <p>Refers to the Transformation Chain that will be applied</p>
+    <h4>Args</h4>
+    <p>Contains the arguments that are passed to every transformation in the chain.</p>
+    <h4>Example</h4>
+    <pre>
+      "actions": {
+        "language": {
+          "co.uk": {
+            "chain": "language",
+            "args": ["co.uk"]
+          },
+          "de": {
+            "chain": "language",
+            "args": ["de"]
+          }
+        }
+      }
+    </pre>
+    <h3>Transformation Chains</h3>
+    <p>
+        In a transformation chain you define one or multiple transformations that shall be applied to the url.<br/>
+        <br/>
+        The <strong>transformations</strong> section in JSON is represented by a JSON object, so transformation chains
+        are
+        represented by the <strong>field names</strong> of that object.<br/>
+        In the example below you find one transformation chain named <strong>environment</strong>.<br/>
+        The name is used to connect the transformation chain with a concrete action.
+
+    </p>
+    <h4>Example</h4>
+    <pre>
+    "transformations": {
+        "environment": [
+          {
+            "transform": { /* ... */ },
+            "chainArgs": {
+              "breakIfNotFound": false,
+              "breakIfFound": true
+            }
+          },
+        ]
+    }
+    </pre>
+
+    <h4>Chain Args</h4>
+    <p>
+        Having multiple transformations may require to control the chain to stop under certain conditions.<br/>
+        This is what the <strong>chainArgs</strong> are used for that are defined per transformation.<br/>
+    </p>
+    <ul>
+        <li>breakIfNotFound</li>
+        <li>breakIfFound</li>
+    </ul>
+    <h5>breakIfNotFound</h5>
+    <p>If set to true and the current transformation did not make any change, transformation chain is stopped</p>
+    <h5>breakIfFound</h5>
+    <p>If set to true and the current transformation did make a change, transformation chain is stopped</p>
+
+
+    <h3>Transformations</h3>
+    <p>
+        Each transformation object contains two fields <strong>type</strong> and <strong>field</strong>.
+        <br/>The type value indicates which type of transformation is represented.<br/>
+        <br/>The field value indicates which part of the url is to be transformed.<br/>
+        <br/>
+    </p>
+    <h4>URL fields</h4>
+    <p>
+        Defining the field name or the URL allows to restrict the scope of replacement which can be helpful.<br/>
+        Here's a representation of a urls data so it gets clear which fields contains which data parts of the url.<br/>
+        <br/>
+        Sample url:
+        <br/>
+        <br/><strong>http://Username:Password@www.domain.sample:8090/index.html?q=1#h=2</strong>.
+    </p>
+    <h4>Example</h4>
+    <pre>
+    URL {
+        hash: "#h=2",
+        host: "www.domain.sample:8090",
+        hostname: "www.domain.sample",
+        href: "http://Username:Password@www.domain.sample:8090/index.html?q=1#h=2",
+        origin: "http://www.domain.sample:8090",
+        password: "Password",
+        pathname: "/index.html",
+        port: "8090",
+        protocol: "http:",
+        search: "?q=1",
+        username: "Username",
+    }
+    </pre>
+
+    <h3>Transformation Types</h3>
+    <p><strong>Available types of transformations:</strong></p>
+    <ul>
+        <li>regExReplacement</li>
+    </ul>
+
+    <h4>RegEx Replacement</h4>
+    <ul>
+        <li>regEx</li>
+        <li>replacement</li>
+    </ul>
+    <p>
+        <strong>regEx</strong> stands for <strong>regular expression</strong> and is the tool to match a specific parts
+        of the URL.<br/>
+        In the example below the value is <strong>.*</strong> which means to select every character of the url.<br/>
+        <br/>
+
+        <strong>replacement</strong> holds the data that will replace the selected characters.<br/>
+        The transformation would replace 'all characters' in 'href' with 'http://www.mydomain.com'<br/>
+    </p>
+    <h5>Example</h5>
+    <pre>
+        "transform": {
+          "type": "regExReplacement",
+          "field": "href",
+          "regEx": ".*",
+          "replacement": "http://www.mydomain.com"
+        },
+    </pre>
+
+    <h5>Arguments</h5>
+    <p>The replacement value can take arguments represented by placeholders eg.
+        <strong>http://www.mydomain.$1</strong><br/>
+        <strong>$1</strong> means to substitute the first argument that was given to the transformation.<br/>
+        By this, replacements are parameterizable which makes it easy to define several actions that perform the same
+        transformation, but with different data.<br/>
+    </p>
+
+    <h3>Test URLs</h3>
+    <p>
+        To check and see how your actions would work against some real urls you can define a list of testURLs.<br/>
+        All Urls will be used to test all actions against.<br/>
+        This is what you see on <a href="test.html">Test Page</a>.<br/>
+    </p>
+
+</section>
+
+</body>
+</html>
