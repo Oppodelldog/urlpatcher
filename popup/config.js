@@ -12,9 +12,9 @@ function saveConfig() {
     saveStatus.innerHTML = "";
     saveStatus.classList.remove("success")
     saveStatus.classList.remove("error")
-    try {
 
-        backgroundPage.setConfig(JSON.parse(configValue))
+    try {
+        backgroundPage.setActiveConfig(JSON.parse(configValue))
 
         saveStatus.innerHTML = "OK"
         saveStatus.classList.add("success")
@@ -37,13 +37,12 @@ function selectTokenErrorPosition(e, config, configValue) {
     try {
         const parts = e.message.split(" ");
         let pos = parseInt(parts[parts.length - 1]);
-        config.focus();
-        let left = pos;
-        let right = pos + 1
-        if (right >= configValue.length) {
-            right = configValue.length - 1;
+        let end = pos + 1
+        if (end >= configValue.length) {
+            end = configValue.length - 1;
         }
-        config.setSelectionRange(left, right)
+        config.focus();
+        config.setSelectionRange(pos, end)
     } catch (e) {
         console.error(e)
     }
