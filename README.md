@@ -1,5 +1,7 @@
 # url-patcher chrome-extension
 
+![url-patcher icon](icons/icon-128.png)
+
 This extension supports switching similar urls by applying custom url-transformations.  
 
 ## How to contribute
