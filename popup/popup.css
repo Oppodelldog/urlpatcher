@@ -56,9 +56,13 @@ ul {
 
 
 ul.group li {
-    padding: 5px;
+    padding: 8px;
     font-size: 24px;
     cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    margin-bottom:10px;
+    margin-left:10px;
 }
 
 ul.group li:hover {
@@ -71,7 +75,10 @@ ul.group {
     min-width: 480px;
     align-items: center;
     font-size: 20px;
-    border-bottom: 1px solid black;
+}
+
+ul.actions > li {
+    margin-top:10px;
 }
 
 ul.group .action {
