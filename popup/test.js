@@ -3,28 +3,33 @@ function processTestUrls() {
     const testURLsHint = document.getElementById('testURLsHint')
     const testDescription = document.getElementById('testDescription');
     const elTestOutput = document.getElementById('testOutput');
+    const maxLenActionName = getActionNameMaxLen();
     elTestOutput.innerHTML = "";
     testURLsHint.className = "hidden"
     testDescription.className = ""
 
     try {
         backgroundPage.getTestUrls().forEach((url) => {
-            let elUrl = document.createElement("li");
+            const elUrl = document.createElement("li");
             elUrl.innerHTML = url;
             elUrl.className = "url"
             elTestOutput.appendChild(elUrl);
 
             backgroundPage.getActionGroupNames().forEach((actionGroupName) => {
-                let elGroup = document.createElement("li");
+                const elGroup = document.createElement("li");
                 elGroup.innerHTML = actionGroupName;
                 elGroup.className = "group"
                 elTestOutput.appendChild(elGroup);
 
                 backgroundPage.getActionNames(actionGroupName).forEach((actionName) => {
-                    let transformationChain = createAction(backgroundPage, actionGroupName, actionName);
-                    let res = `${actionName} -> ${transformationChain.transform(url)} [${transformationChain.getMatchedTransformations().join(',')}]`
+                    const transformationChain = createAction(backgroundPage, actionGroupName, actionName);
+                    const transformedUrl = transformationChain.transform(url);
+                    const matchedTransformations = transformationChain.getMatchedTransformations().join(',');
 
-                    let elResult = document.createElement("li");
+                    const padActionName = actionName + "&nbsp;".repeat(maxLenActionName - actionName.length);
+                    const res = `${padActionName} -> ${transformedUrl} [${matchedTransformations}]`
+
+                    const elResult = document.createElement("li");
                     elResult.innerHTML = res;
                     elResult.className = "result"
                     elTestOutput.appendChild(elResult);
@@ -37,12 +42,29 @@ function processTestUrls() {
             testDescription.className = "hidden"
         }
     } catch (e) {
-        let elUrl = document.createElement("li");
+        const elUrl = document.createElement("li");
         elUrl.innerHTML = e;
         elUrl.className = "error"
         elTestOutput.appendChild(elUrl);
     }
 }
+
+function getActionNameMaxLen() {
+    const backgroundPage = chrome.extension.getBackgroundPage();
+    let maxLength = 0;
+
+    backgroundPage.getActionGroupNames().forEach((actionGroupName) => {
+        backgroundPage.getActionNames(actionGroupName).forEach((actionName) => {
+            const len = actionName.length;
+            if (maxLength < len) {
+                maxLength = len;
+            }
+        })
+    })
+
+    return maxLength;
+}
+
 
 window.addEventListener('load', () => {
     processTestUrls();
